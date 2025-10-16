@@ -35,10 +35,33 @@ export const register = async (req, res) => {
 
 // login
 export const login = async (req, res) => {
+    const { email, password } = req.body;
+    console.log(req.body);
 
+    const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+
+    if(users.length === 0) {
+        return errorResponse(res, 'Email atau password salah', null, 401);
+    }
+
+    const user = users[0];
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if(!isPasswordValid) {
+        return errorResponse(res, 'Email atau password salah', null, 401);
+    }
+
+    const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
+    res.cookie('token', token, cookieOptions);
+
+    return successResponse(res, 'Login berhasil', { token });
 }
 
 // logoout
-export const logout = async (req, res) => {
-
+export const logout = (req, res) => {
+    res.clearCookie('token', {
+        ...cookieOptions(req), // menghapus semua yang termasuk ke dalam cookie 
+        maxAge: undefined
+    })
+    return successResponse(res, 'berhasil logout yeyy')
 }
