@@ -23,7 +23,7 @@ app.use('/api/books', bookRoutes);
 
 app.get("/", async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT NOW() AS now");
+    const [rows] = await pool.query("SELECT NOW() AS now");
     res.json(rows[0]);
   } catch (err) {
     console.error(err);
