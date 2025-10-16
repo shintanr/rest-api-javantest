@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import pool from './config/database.js';
 import authRoutes from './routes/auth.route.js';
+import bookRoutes from './routes/book.route.js';
 
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // routees
 app.use('/api/auth', authRoutes);
+app.use('/api/books', bookRoutes); 
 
 
 app.listen(PORT, () => {
