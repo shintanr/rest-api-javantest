@@ -8,7 +8,7 @@ import bookRoutes from './routes/book.route.js';
 
 dotenv.config();
 const app = express();
-const PORT = process.env.DB_PORT || 5000;
+const PORT = process.env.DB_PORT;
 
 
 // Middleware
@@ -19,6 +19,18 @@ app.use(express.urlencoded({ extended: true }));
 // routees
 app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes); 
+
+
+app.get("/", async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT NOW() AS now");
+    res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+});
+
 
 
 app.listen(PORT, () => {
