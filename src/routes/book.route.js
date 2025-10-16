@@ -10,10 +10,10 @@ import { verifyToken } from '../middlewares/verifyToken.js';
 
 const router = express.Router();
 
-router.get('/', verifyToken, getBooks);
-router.get('/:id', verifyToken, getBookById);
-router.post('/', verifyToken, createBook);
-router.put('/:id', verifyToken, updateBook);
-router.delete('/:id', verifyToken, deleteBook);
+router.get('/', getBooks);
+router.get('/:id', getBookById);
+router.post('/', createBook);
+router.put('/:id', updateBook);
+router.delete('/:id', deleteBook);
 
 export default router;
